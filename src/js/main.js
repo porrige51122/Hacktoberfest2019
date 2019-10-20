@@ -19,8 +19,12 @@ window.startGame = function () {
   let string = document.getElementById("essay").value;
   res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
   res = res.split(" ");
-  createRack();
+
   init();
+  entities[0].pos = canvas.width / 2;
+
+  createRack();
+
 }
 
 function createRack() {
