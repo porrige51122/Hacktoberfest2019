@@ -1,0 +1,4 @@
+function renderMain() {
+}
+
+export { renderMain };

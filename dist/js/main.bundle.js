@@ -96,17 +96,58 @@
 "use strict";
 
 
-var _utils = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module './utils'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
-var _utils2 = _interopRequireDefault(_utils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _render = __webpack_require__(/*! ./render.js */ "./src/js/render.js");
 
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
+
+function eventListeners() {}
+
+function init() {
+  eventListeners();
+  loop();
+}
+
+function resize() {}
+
+function tick() {}
+
+function render() {
+  (0, _render.renderMain)();
+}
+
+function loop() {
+  window.requestAnimationFrame(function () {
+    resize();
+    tick();
+    render();
+    loop();
+  });
+}
+
+init();
+
+/***/ }),
+
+/***/ "./src/js/render.js":
+/*!**************************!*\
+  !*** ./src/js/render.js ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function renderMain() {}
+
+exports.renderMain = renderMain;
 
 /***/ })
 
