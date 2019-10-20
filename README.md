@@ -11,3 +11,5 @@ This is a Atari Breakout clone with a twist, you destroy your essays! To start t
 4. Open a command prompt and navigate to this location using the cd command.
 5. Type "npm install" to install npm.
 6. Type "npm start" to run the program. 
+
+### Demo: https://essay-breakout.herokuapp.com/
