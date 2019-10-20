@@ -105,43 +105,62 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Collisions = function () {
-  function Collisions(paddle, ball) {
+  function Collisions(paddle, ball, bricks) {
     _classCallCheck(this, Collisions);
 
     this.ball = ball;
     this.paddle = paddle;
+    this.bricks = bricks;
   }
 
   _createClass(Collisions, [{
-    key: "checkBounce",
-    value: function checkBounce(cellSize) {
-      if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
-
-        this.bounceX();
-      }
-      if (this.ball.pos[1] > 3) {
-        var paddle = this.paddle.pos / cellSize - this.paddle.width / 2 < this.ball.pos[0] && this.paddle.pos / cellSize + this.paddle.width / 2 > this.ball.pos[0];
-        if (paddle) {
-          this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
-        } else {
-          this.ball.reset();
+    key: 'checkBreak',
+    value: function checkBreak() {
+      var bp = this.ball.pos;
+      for (var i = 0; i < this.bricks.length; i++) {
+        var b = this.bricks[i];
+        var brickX = b.pos[0] - this.width / 2;
+        var brickY = b.pos[1] - 1 / 4;
+        var withinX = bp[0] > brickX && bp[0] < brickX + b.width;
+        var withinY = bp[1] > brickY && bp[1] < brickY + 1 / 8;
+        if (withinX && withinY) {
+          console.log('HIT');
         }
-      } else if (this.ball.pos[1] < 0) {
-        this.bounceY();
       }
     }
   }, {
-    key: "bounceX",
+    key: 'checkBounce',
+    value: function checkBounce(cellSize) {
+      if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
+        this.bounceX();
+      }
+      if (!this.ball.colliding) {
+        if (this.ball.pos[1] > 3) {
+          var paddle = this.paddle.pos / cellSize - this.paddle.width / 2 < this.ball.pos[0] && this.paddle.pos / cellSize + this.paddle.width / 2 > this.ball.pos[0];
+          if (paddle) {
+            this.ball.colliding = true;
+            this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
+          } else {
+            this.ball.reset();
+          }
+        } else if (this.ball.pos[1] < 0) {
+          this.ball.colliding = true;
+          this.bounceY();
+        }
+      }
+    }
+  }, {
+    key: 'bounceX',
     value: function bounceX() {
       this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: "bounceY",
+    key: 'bounceY',
     value: function bounceY() {
       this.ball.vel[1] = -this.ball.vel[1];
     }
   }, {
-    key: "paddleBounce",
+    key: 'paddleBounce',
     value: function paddleBounce(padPos, padWidth, ballPos) {
       var newVel = void 0;
       if (ballPos < padPos + padWidth / 6) {
@@ -193,6 +212,7 @@ var Ball = function () {
     this.pos = pos;
     this.vel = [0.01, 0.01];
     this.width = 0.05;
+    this.colliding = false;
   }
 
   _createClass(Ball, [{
@@ -204,6 +224,7 @@ var Ball = function () {
   }, {
     key: "tick",
     value: function tick() {
+      this.colliding = false;
       this.pos[0] += this.vel[0];
       this.pos[1] += this.vel[1];
     }
@@ -221,6 +242,57 @@ var Ball = function () {
 }();
 
 exports.default = Ball;
+
+/***/ }),
+
+/***/ "./src/js/entities/brick.js":
+/*!**********************************!*\
+  !*** ./src/js/entities/brick.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Brick = function () {
+  function Brick(pos) {
+    _classCallCheck(this, Brick);
+
+    this.pos = pos;
+    this.value = "TESTING";
+    this.width = this.value.length / 10;
+    this.visible = true;
+  }
+
+  _createClass(Brick, [{
+    key: "tick",
+    value: function tick(pos) {
+      this.pos = pos;
+    }
+  }, {
+    key: "render",
+    value: function render(canvas, ctx, cellSize) {
+      ctx.fillStyle = "#000000";
+      var x = this.pos[0] * cellSize - cellSize * this.width / 2;
+      var y = this.pos[1] * cellSize - cellSize / 8;
+
+      ctx.fillRect(x, y, this.width * cellSize, cellSize / 4);
+    }
+  }]);
+
+  return Brick;
+}();
+
+exports.default = Brick;
 
 /***/ }),
 
@@ -290,6 +362,10 @@ var _ball = __webpack_require__(/*! ./entities/ball.js */ "./src/js/entities/bal
 
 var _ball2 = _interopRequireDefault(_ball);
 
+var _brick = __webpack_require__(/*! ./entities/brick.js */ "./src/js/entities/brick.js");
+
+var _brick2 = _interopRequireDefault(_brick);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var canvas = document.querySelector('canvas');
@@ -299,6 +375,7 @@ canvas.width = -1;
 canvas.height = -1;
 
 var entities = [new _paddle2.default(innerWidth / 2), new _ball2.default([1, 2])];
+var bricks = [new _brick2.default([1, 1])];
 
 function eventListeners() {
   canvas.addEventListener("mousemove", function () {
@@ -336,7 +413,7 @@ function tick() {
 }
 
 function render() {
-  (0, _render.renderMain)(canvas, ctx, entities, cellSize);
+  (0, _render.renderMain)(canvas, ctx, entities, cellSize, bricks);
 }
 
 function loop() {
@@ -373,14 +450,18 @@ var _collisions2 = _interopRequireDefault(_collisions);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function renderMain(canvas, ctx, entities, cellSize) {
-  ctx.fillStyle = "#FF0000";
+function renderMain(canvas, ctx, entities, cellSize, bricks) {
+  ctx.fillStyle = "#f1c40f";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  var hit = new _collisions2.default(entities[0], entities[1]);
+  var hit = new _collisions2.default(entities[0], entities[1], bricks);
   entities.forEach(function (entity) {
     return entity.render(canvas, ctx, cellSize);
   });
+  bricks.forEach(function (brick) {
+    return brick.render(canvas, ctx, cellSize);
+  });
   hit.checkBounce(cellSize);
+  hit.checkBreak(cellSize);
 }
 
 exports.renderMain = renderMain;

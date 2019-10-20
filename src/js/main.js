@@ -1,6 +1,7 @@
 import { renderMain } from './render.js';
 import Paddle from './entities/paddle.js';
 import Ball from './entities/ball.js';
+import Brick from './entities/brick.js';
 
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
@@ -9,6 +10,7 @@ canvas.width = -1;
 canvas.height = -1;
 
 let entities = [new Paddle(innerWidth/2), new Ball([1, 2])];
+let bricks = [new Brick([1, 1])];
 
 function eventListeners() {
   canvas.addEventListener("mousemove", () => {
@@ -46,7 +48,7 @@ function tick() {
 }
 
 function render() {
-  renderMain(canvas, ctx, entities, cellSize);
+  renderMain(canvas, ctx, entities, cellSize, bricks);
 }
 
 function loop() {

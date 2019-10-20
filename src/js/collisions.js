@@ -1,25 +1,42 @@
 class Collisions {
-  constructor(paddle, ball) {
+  constructor(paddle, ball, bricks) {
     this.ball = ball;
     this.paddle = paddle;
+    this.bricks = bricks;
+  }
+
+  checkBreak() {
+    let bp = this.ball.pos;
+    for (let i = 0; i < this.bricks.length; i++) {
+      let b = this.bricks[i];
+      let brickX = (b.pos[0]) - (this.width) / 2;
+      let brickY = (b.pos[1]) - (1 / 4);
+      let withinX = bp[0] > brickX && bp[0] < (brickX + b.width);
+      let withinY = bp[1] > brickY && bp[1] < (brickY + 1/8);
+      if (withinX && withinY) {
+        console.log('HIT');
+      }
+    }
   }
 
   checkBounce(cellSize) {
     if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
-
         this.bounceX();
-
     }
-    if (this.ball.pos[1] > 3) {
-      let paddle = ((this.paddle.pos/cellSize) - (this.paddle.width/2)) < this.ball.pos[0] &&
-      ((this.paddle.pos/cellSize) + (this.paddle.width/2)) > this.ball.pos[0];
-      if (paddle) {
-        this.paddleBounce((this.paddle.pos/cellSize) - (this.paddle.width/2), this.paddle.width, this.ball.pos[0]);
-      } else {
-        this.ball.reset();
+    if (!this.ball.colliding) {
+      if (this.ball.pos[1] > 3) {
+        let paddle = ((this.paddle.pos/cellSize) - (this.paddle.width/2)) < this.ball.pos[0] &&
+        ((this.paddle.pos/cellSize) + (this.paddle.width/2)) > this.ball.pos[0];
+        if (paddle) {
+          this.ball.colliding = true;
+          this.paddleBounce((this.paddle.pos/cellSize) - (this.paddle.width/2), this.paddle.width, this.ball.pos[0]);
+        } else {
+          this.ball.reset();
+        }
+      } else if (this.ball.pos[1] < 0) {
+        this.ball.colliding = true;
+        this.bounceY();
       }
-    } else if (this.ball.pos[1] < 0) {
-      this.bounceY();
     }
   }
 

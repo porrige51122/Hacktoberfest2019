@@ -3,6 +3,7 @@ class Ball {
     this.pos = pos;
     this.vel = [0.01, 0.01];
     this.width = 0.05;
+    this.colliding = false;
   }
 
   reset() {
@@ -11,6 +12,7 @@ class Ball {
   }
 
   tick() {
+    this.colliding = false;
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
   }
