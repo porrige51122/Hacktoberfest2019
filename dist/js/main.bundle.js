@@ -102,6 +102,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _main = __webpack_require__(/*! ./main.js */ "./src/js/main.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Collisions = function () {
@@ -114,8 +116,8 @@ var Collisions = function () {
   }
 
   _createClass(Collisions, [{
-    key: "checkBreak",
-    value: function checkBreak() {
+    key: 'checkBreak',
+    value: function checkBreak(nextLevel) {
       var isWin = true;
       var bp = this.ball.pos;
       var bw = this.ball.width;
@@ -135,13 +137,17 @@ var Collisions = function () {
         }
       }
       if (isWin) {
-        document.getElementById("canvas").style.display = "none";
-        document.getElementById("youWin").style.display = "block";
-        this.ball.vel = [0, 0];
+        if (nextLevel) {
+          (0, _main.createRack)();
+        } else {
+          document.getElementById("canvas").style.display = "none";
+          document.getElementById("youWin").style.display = "block";
+          this.ball.vel = [0, 0];
+        }
       }
     }
   }, {
-    key: "checkBounce",
+    key: 'checkBounce',
     value: function checkBounce(cellSize) {
       if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
         this.bounceX();
@@ -165,17 +171,17 @@ var Collisions = function () {
       }
     }
   }, {
-    key: "bounceX",
+    key: 'bounceX',
     value: function bounceX() {
       this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: "bounceY",
+    key: 'bounceY',
     value: function bounceY() {
       this.ball.vel[1] = -this.ball.vel[1];
     }
   }, {
-    key: "paddleBounce",
+    key: 'paddleBounce',
     value: function paddleBounce(padPos, padWidth, ballPos) {
       var newVel = void 0;
       if (ballPos < padPos + padWidth / 6) {
@@ -248,7 +254,7 @@ var Ball = function () {
   }, {
     key: "render",
     value: function render(canvas, ctx, cellSize) {
-      this.difficulty += 0.001;
+      this.difficulty += 0.0002;
       this.colliding = false;
       ctx.fillStyle = "#000000";
       ctx.beginPath();
@@ -379,6 +385,11 @@ exports.default = Paddle;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createRack = undefined;
+
 var _render = __webpack_require__(/*! ./render.js */ "./src/js/render.js");
 
 var _paddle = __webpack_require__(/*! ./entities/paddle.js */ "./src/js/entities/paddle.js");
@@ -407,9 +418,9 @@ var res = void 0;
 
 window.startGame = function () {
   var string = document.getElementById("essay").value;
-  if (string.length == 0 || string.length > 5000) {
+  if (string.length == 0) {
     Toastify({
-      text: "Your essay must contain at least one character and less than 5000 characters.",
+      text: "Your essay must contain at least one character.",
       duration: 3000,
       newWindow: true,
       close: true,
@@ -433,10 +444,12 @@ window.startGame = function () {
   }
 };
 
+var index = 0;
+var nextLevel = false;
+
 function createRack() {
   var maxLetters = 50;
   var lettersPerLine = 0;
-  var index = 0;
   out: for (var height = 1 / 6; height < 2; height += 1 / 6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
@@ -448,12 +461,15 @@ function createRack() {
     }
     lettersPerLine = 0;
   }
+  if (index < res.length) {
+    nextLevel = true;
+  }
 }
 
 function eventListeners() {
   window.document.onkeydown = function (e) {
-    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 10;
-    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 10;
+    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 20;
+    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 20;
   };
 }
 
@@ -487,7 +503,7 @@ function tick() {
 }
 
 function render() {
-  (0, _render.renderMain)(canvas, ctx, entities, cellSize, bricks);
+  (0, _render.renderMain)(canvas, ctx, entities, cellSize, bricks, nextLevel);
 }
 
 function loop() {
@@ -498,6 +514,8 @@ function loop() {
     loop();
   });
 }
+
+exports.createRack = createRack;
 
 /***/ }),
 
@@ -522,7 +540,7 @@ var _collisions2 = _interopRequireDefault(_collisions);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function renderMain(canvas, ctx, entities, cellSize, bricks) {
+function renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel) {
   ctx.fillStyle = "#f1c40f";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   var hit = new _collisions2.default(entities[0], entities[1], bricks);
@@ -533,7 +551,7 @@ function renderMain(canvas, ctx, entities, cellSize, bricks) {
     return brick.render(canvas, ctx, cellSize);
   });
   hit.checkBounce(cellSize);
-  hit.checkBreak(cellSize);
+  hit.checkBreak(cellSize, nextLevel);
 }
 
 exports.renderMain = renderMain;

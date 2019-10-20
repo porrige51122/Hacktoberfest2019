@@ -1,3 +1,5 @@
+import { createRack } from './main.js';
+
 class Collisions {
   constructor(paddle, ball, bricks) {
     this.ball = ball;
@@ -5,7 +7,7 @@ class Collisions {
     this.bricks = bricks;
   }
 
-  checkBreak() {
+  checkBreak(nextLevel) {
     let isWin = true;
     let bp = this.ball.pos;
     let bw = this.ball.width;
@@ -24,10 +26,14 @@ class Collisions {
         }
       }
     }
-    if (isWin){
-      document.getElementById("canvas").style.display = "none";
-      document.getElementById("youWin").style.display = "block";
-      this.ball.vel = [0,0];
+    if (isWin) {
+      if (nextLevel) {
+        createRack();
+      } else {
+        document.getElementById("canvas").style.display = "none";
+        document.getElementById("youWin").style.display = "block";
+        this.ball.vel = [0,0];
+      }
     }
   }
 
