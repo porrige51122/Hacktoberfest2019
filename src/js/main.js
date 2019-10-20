@@ -20,11 +20,23 @@ window.startGame = function () {
   res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
   res = res.split(" ");
   createRack();
+  init();
 }
 
 function createRack() {
-  for (let i = 0; i < res.length; i++) {
-    bricks.push(new Brick([Math.random() * 4, Math.random() * 2], res[i]));
+  const maxLetters = 50;
+  let lettersPerLine = 0;
+  let index = 0;
+  out: for (let height = 1/6; height < 2; height += 1/6) {
+    while (lettersPerLine < maxLetters - 5) {
+      if (index >= res.length) {
+        break out;
+      }
+      bricks.push(new Brick([4 * (lettersPerLine/maxLetters), height], res[index]));
+      lettersPerLine += res[index].length + 1;
+      index++;
+    }
+    lettersPerLine = 0;
   }
 }
 
@@ -76,5 +88,3 @@ function loop() {
     loop();
   })
 }
-
-init();
