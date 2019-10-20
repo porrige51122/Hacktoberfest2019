@@ -99,10 +99,10 @@
 var _render = __webpack_require__(/*! ./render.js */ "./src/js/render.js");
 
 var canvas = document.querySelector('canvas');
-var c = canvas.getContext('2d');
+var ctx = canvas.getContext('2d');
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+canvas.width = 0;
+canvas.height = 0;
 
 function eventListeners() {}
 
@@ -111,12 +111,27 @@ function init() {
   loop();
 }
 
-function resize() {}
+var aspectRatio = [16, 9];
+var oldSize = [innerWidth, innerHeight];
+
+function resize() {
+  if (oldSize[0] != innerWidth || oldSize[1] != innerHeight) {
+    var cellWidth = innerWidth / aspectRatio[0];
+    var cellHeight = innerHeight / aspectRatio[1];
+    if (cellWidth > cellHeight) {
+      cellWidth = cellHeight;
+    } else {
+      cellHeight = cellWidth;
+    }
+    canvas.width = cellWidth * aspectRatio[0];
+    canvas.height = cellHeight * aspectRatio[1];
+  }
+}
 
 function tick() {}
 
 function render() {
-  (0, _render.renderMain)();
+  (0, _render.renderMain)(canvas, ctx);
 }
 
 function loop() {
@@ -145,7 +160,10 @@ init();
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-function renderMain() {}
+function renderMain(canvas, ctx) {
+  ctx.fillStyle = "#FF0000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
 
 exports.renderMain = renderMain;
 
