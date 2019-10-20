@@ -86,6 +86,52 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/js/entities/paddle.js":
+/*!***********************************!*\
+  !*** ./src/js/entities/paddle.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Paddle = function () {
+  function Paddle(pos) {
+    _classCallCheck(this, Paddle);
+
+    this.pos = pos;
+    this.width = 1;
+  }
+
+  _createClass(Paddle, [{
+    key: "tick",
+    value: function tick(pos) {
+      this.pos = pos;
+    }
+  }, {
+    key: "render",
+    value: function render(canvas, ctx, cellSize) {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(this.pos - cellSize * this.width / 2, canvas.height - 5, this.width * cellSize, 5);
+    }
+  }]);
+
+  return Paddle;
+}();
+
+exports.default = Paddle;
+
+/***/ }),
+
 /***/ "./src/js/main.js":
 /*!************************!*\
   !*** ./src/js/main.js ***!
@@ -98,25 +144,56 @@
 
 var _render = __webpack_require__(/*! ./render.js */ "./src/js/render.js");
 
+var _paddle = __webpack_require__(/*! ./entities/paddle.js */ "./src/js/entities/paddle.js");
+
+var _paddle2 = _interopRequireDefault(_paddle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var canvas = document.querySelector('canvas');
-var c = canvas.getContext('2d');
+var ctx = canvas.getContext('2d');
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+canvas.width = -1;
+canvas.height = -1;
 
-function eventListeners() {}
+var entities = [new _paddle2.default(innerWidth / 2)];
+
+function eventListeners() {
+  canvas.addEventListener("mousemove", function () {
+    entities[0].pos = event.clientX;
+    console.log('wow');
+  });
+}
 
 function init() {
+  resize();
   eventListeners();
   loop();
 }
 
-function resize() {}
+var aspectRatio = [4, 3];
+var oldSize = [canvas.width, canvas.height];
+var cellSize = 1;
+
+function resize() {
+  if (oldSize[0] != innerWidth || oldSize[1] != innerHeight) {
+    var cellWidth = innerWidth / aspectRatio[0];
+    var cellHeight = innerHeight / aspectRatio[1];
+    if (cellWidth > cellHeight) {
+      cellWidth = cellHeight;
+    } else {
+      cellHeight = cellWidth;
+    }
+    cellSize = cellHeight;
+    canvas.width = cellWidth * aspectRatio[0];
+    canvas.height = cellHeight * aspectRatio[1];
+  }
+}
 
 function tick() {}
 
 function render() {
-  (0, _render.renderMain)();
+  (0, _render.renderMain)(canvas, ctx, entities, cellSize);
 }
 
 function loop() {
@@ -145,7 +222,13 @@ init();
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-function renderMain() {}
+function renderMain(canvas, ctx, entities, cellSize) {
+  ctx.fillStyle = "#FF0000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  entities.forEach(function (entity) {
+    return entity.render(canvas, ctx, cellSize);
+  });
+}
 
 exports.renderMain = renderMain;
 
