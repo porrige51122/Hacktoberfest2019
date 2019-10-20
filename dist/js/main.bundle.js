@@ -81,21 +81,34 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/canvas.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/main.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/js/canvas.js":
-/*!**************************!*\
-  !*** ./src/js/canvas.js ***!
-  \**************************/
+/***/ "./src/js/main.js":
+/*!************************!*\
+  !*** ./src/js/main.js ***!
+  \************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\Aidan\\Documents\\Projects\\canvas-boilerplate\\src\\js\\canvas.js'");
+"use strict";
+
+
+var _utils = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module './utils'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var _utils2 = _interopRequireDefault(_utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var canvas = document.querySelector('canvas');
+var c = canvas.getContext('2d');
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=canvas.bundle.js.map
+//# sourceMappingURL=main.bundle.js.map
