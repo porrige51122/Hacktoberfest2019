@@ -20,7 +20,7 @@ class Ball {
   }
 
   render(canvas, ctx, cellSize) {
-    this.difficulty += 0.001
+    this.difficulty += 0.0002;
     this.colliding = false;
     ctx.fillStyle = "#000000";
     ctx.beginPath();
