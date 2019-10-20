@@ -114,13 +114,15 @@ var Collisions = function () {
   }
 
   _createClass(Collisions, [{
-    key: 'checkBreak',
+    key: "checkBreak",
     value: function checkBreak() {
+      var isWin = true;
       var bp = this.ball.pos;
       var bw = this.ball.width;
       for (var i = 0; i < this.bricks.length; i++) {
         var b = this.bricks[i];
         if (b.visible) {
+          isWin = false;
           var brickX = b.pos[0];
           var brickY = b.pos[1];
           var withinX = bp[0] + bw > brickX && bp[0] - bw < brickX + b.width;
@@ -132,9 +134,14 @@ var Collisions = function () {
           }
         }
       }
+      if (isWin) {
+        document.getElementById("canvas").style.display = "none";
+        document.getElementById("youWin").style.display = "block";
+        this.ball.vel = [0, 0];
+      }
     }
   }, {
-    key: 'checkBounce',
+    key: "checkBounce",
     value: function checkBounce(cellSize) {
       if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
         this.bounceX();
@@ -146,7 +153,10 @@ var Collisions = function () {
             this.ball.colliding = true;
             this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
           } else {
-            this.ball.reset();
+            //this.ball.reset();
+            document.getElementById("canvas").style.display = "none";
+            document.getElementById("gameOver").style.display = "block";
+            this.ball.vel = [0, 0];
           }
         } else if (this.ball.pos[1] - this.ball.width < 0) {
           this.ball.colliding = true;
@@ -155,17 +165,17 @@ var Collisions = function () {
       }
     }
   }, {
-    key: 'bounceX',
+    key: "bounceX",
     value: function bounceX() {
       this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: 'bounceY',
+    key: "bounceY",
     value: function bounceY() {
       this.ball.vel[1] = -this.ball.vel[1];
     }
   }, {
-    key: 'paddleBounce',
+    key: "paddleBounce",
     value: function paddleBounce(padPos, padWidth, ballPos) {
       var newVel = void 0;
       if (ballPos < padPos + padWidth / 6) {
@@ -231,7 +241,6 @@ var Ball = function () {
   }, {
     key: "tick",
     value: function tick() {
-      this.difficulty += 0.001;
       this.colliding = false;
       this.pos[0] += this.vel[0] * this.difficulty;
       this.pos[1] += this.vel[1] * this.difficulty;
@@ -239,6 +248,8 @@ var Ball = function () {
   }, {
     key: "render",
     value: function render(canvas, ctx, cellSize) {
+      this.difficulty += 0.001;
+      this.colliding = false;
       ctx.fillStyle = "#000000";
       ctx.beginPath();
       ctx.arc(this.pos[0] * cellSize, this.pos[1] * cellSize, this.width * cellSize, 0, 2 * Math.PI);
@@ -395,16 +406,31 @@ var bricks = [];
 var res = void 0;
 
 window.startGame = function () {
-  document.getElementById("hide").style.display = "none";
-  document.getElementById("canvas").style.display = "block";
   var string = document.getElementById("essay").value;
-  res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
-  res = res.split(" ");
+  if (string.length == 0 || string.length > 5000) {
+    Toastify({
+      text: "Your essay must contain at least one character and less than 5000 characters.",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: 'right', // `left`, `center` or `right`
+      backgroundColor: "#ff3f34",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function onClick() {} // Callback after click
+    }).showToast();
+  } else {
+    document.getElementById("hide").style.display = "none";
+    document.getElementById("canvas").style.display = "block";
 
-  init();
-  entities[0].pos = canvas.width / 2;
+    res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+    res = res.split(" ");
 
-  createRack();
+    init();
+    entities[0].pos = canvas.width / 2;
+
+    createRack();
+  }
 };
 
 function createRack() {
