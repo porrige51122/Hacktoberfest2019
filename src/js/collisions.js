@@ -11,8 +11,8 @@ class Collisions {
     for (let i = 0; i < this.bricks.length; i++) {
       let b = this.bricks[i];
       if (b.visible) {
-        let brickX = (b.pos[0]) - b.width / 2;
-        let brickY = (b.pos[1]) - b.height / 2;
+        let brickX = (b.pos[0]);
+        let brickY = (b.pos[1]);
         let withinX = bp[0] + bw > brickX && bp[0] - bw < (brickX + b.width);
         let withinY = bp[1] + bw > brickY && bp[1] - bw < (brickY + b.height);
         if (withinX && withinY) {
