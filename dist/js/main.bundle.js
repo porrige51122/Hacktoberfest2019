@@ -108,30 +108,56 @@ var Collisions = function () {
   function Collisions(paddle, ball) {
     _classCallCheck(this, Collisions);
 
-    console.log('hello');
     this.ball = ball;
     this.paddle = paddle;
   }
 
   _createClass(Collisions, [{
-    key: 'checkBounce',
-    value: function checkBounce() {
+    key: "checkBounce",
+    value: function checkBounce(cellSize) {
       if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
-        this.bounceX(vel);
+
+        this.bounceX();
       }
-      if (this.ball.pos[1] < 0 || this.ball.pos[1] > 3) {
-        this.bounceY(vel);
+      if (this.ball.pos[1] > 3) {
+        var paddle = this.paddle.pos / cellSize - this.paddle.width / 2 < this.ball.pos[0] && this.paddle.pos / cellSize + this.paddle.width / 2 > this.ball.pos[0];
+        if (paddle) {
+          this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
+        } else {
+          this.ball.reset();
+        }
+      } else if (this.ball.pos[1] < 0) {
+        this.bounceY();
       }
     }
   }, {
-    key: 'bounceX',
-    value: function bounceX(vel) {
+    key: "bounceX",
+    value: function bounceX() {
       this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: 'bounceY',
-    value: function bounceY(vel) {
+    key: "bounceY",
+    value: function bounceY() {
       this.ball.vel[1] = -this.ball.vel[1];
+    }
+  }, {
+    key: "paddleBounce",
+    value: function paddleBounce(padPos, padWidth, ballPos) {
+      var newVel = void 0;
+      if (ballPos < padPos + padWidth / 6) {
+        newVel = [-0.03, -0.005];
+      } else if (ballPos < padPos + 2 * padWidth / 6) {
+        newVel = [-0.02, -0.0075];
+      } else if (ballPos < padPos + 3 * padWidth / 6) {
+        newVel = [-0.01, -0.01];
+      } else if (ballPos < padPos + 4 * padWidth / 6) {
+        newVel = [0.01, -0.01];
+      } else if (ballPos < padPos + 5 * padWidth / 6) {
+        newVel = [0.02, -0.0075];
+      } else {
+        newVel = [0.03, -0.005];
+      }
+      this.ball.vel = newVel;
     }
   }]);
 
@@ -170,6 +196,12 @@ var Ball = function () {
   }
 
   _createClass(Ball, [{
+    key: "reset",
+    value: function reset() {
+      this.pos = [1, 2];
+      this.vel = [0.01, 0.01];
+    }
+  }, {
     key: "tick",
     value: function tick() {
       this.pos[0] += this.vel[0];
@@ -348,7 +380,7 @@ function renderMain(canvas, ctx, entities, cellSize) {
   entities.forEach(function (entity) {
     return entity.render(canvas, ctx, cellSize);
   });
-  hit.checkBounce();
+  hit.checkBounce(cellSize);
 }
 
 exports.renderMain = renderMain;
