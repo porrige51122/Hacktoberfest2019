@@ -10,7 +10,7 @@ class Paddle {
 
   render(canvas, ctx, cellSize) {
     ctx.fillStyle = "#000000";
-    ctx.fillRect(this.pos - ((cellSize * this.width)/2), canvas.height - 5, this.width * cellSize, 5);
+    ctx.fillRect(this.pos - ((cellSize * this.width) / 2), canvas.height - 5, this.width * cellSize, 5);
   }
 }
 
