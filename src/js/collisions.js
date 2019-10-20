@@ -7,13 +7,14 @@ class Collisions {
 
   checkBreak() {
     let bp = this.ball.pos;
+    let bw = this.ball.width;
     for (let i = 0; i < this.bricks.length; i++) {
       let b = this.bricks[i];
       if (b.visible) {
-        let brickX = (b.pos[0]) - (b.width) / 2;
-        let brickY = (b.pos[1]) - (1 / 8);
-        let withinX = bp[0] > brickX && bp[0] < (brickX + b.width);
-        let withinY = bp[1] > brickY && bp[1] < (brickY + 1/4);
+        let brickX = (b.pos[0]) - b.width / 2;
+        let brickY = (b.pos[1]) - b.height / 2;
+        let withinX = bp[0] + bw > brickX && bp[0] - bw < (brickX + b.width);
+        let withinY = bp[1] + bw > brickY && bp[1] - bw < (brickY + b.height);
         if (withinX && withinY) {
           this.bounceY();
           console.log('hit');
@@ -24,11 +25,11 @@ class Collisions {
   }
 
   checkBounce(cellSize) {
-    if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
+    if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
         this.bounceX();
     }
     if (!this.ball.colliding) {
-      if (this.ball.pos[1] > 3) {
+      if (this.ball.pos[1] + this.ball.width > 3 - this.paddle.buffer - this.paddle.height) {
         let paddle = ((this.paddle.pos/cellSize) - (this.paddle.width/2)) < this.ball.pos[0] &&
         ((this.paddle.pos/cellSize) + (this.paddle.width/2)) > this.ball.pos[0];
         if (paddle) {
@@ -37,7 +38,7 @@ class Collisions {
         } else {
           this.ball.reset();
         }
-      } else if (this.ball.pos[1] < 0) {
+      } else if (this.ball.pos[1] - this.ball.width < 0) {
         this.ball.colliding = true;
         this.bounceY();
       }

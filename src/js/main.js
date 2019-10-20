@@ -9,20 +9,40 @@ const ctx = canvas.getContext('2d')
 canvas.width = -1;
 canvas.height = -1;
 
-
-let entities = [new Paddle(innerWidth / 2), new Ball([1, 2])];
-let bricks = [new Brick([1, 1])];
+let entities = [new Paddle(innerWidth/2), new Ball([1.15, 2.03])];
+let bricks = [];
+let res;
 
 window.startGame = function () {
   document.getElementById("hide").style.display = "none";
   document.getElementById("canvas").style.display = "block";
   let string = document.getElementById("essay").value;
-  var res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+  res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
   res = res.split(" ");
+
   init();
   entities[0].pos = canvas.width / 2;
+
+  createRack();
+
 }
 
+function createRack() {
+  const maxLetters = 50;
+  let lettersPerLine = 0;
+  let index = 0;
+  out: for (let height = 1/6; height < 2; height += 1/6) {
+    while (lettersPerLine < maxLetters - 5) {
+      if (index >= res.length) {
+        break out;
+      }
+      bricks.push(new Brick([4 * (lettersPerLine/maxLetters), height], res[index]));
+      lettersPerLine += res[index].length + 1;
+      index++;
+    }
+    lettersPerLine = 0;
+  }
+}
 
 function eventListeners() {
   window.document.onkeydown = (e) => {
