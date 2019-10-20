@@ -121,9 +121,9 @@ var Collisions = function () {
         var b = this.bricks[i];
         if (b.visible) {
           var brickX = b.pos[0] - b.width / 2;
-          var brickY = b.pos[1] - 1 / 8;
+          var brickY = b.pos[1] - b.height / 2;
           var withinX = bp[0] > brickX && bp[0] < brickX + b.width;
-          var withinY = bp[1] > brickY && bp[1] < brickY + 1 / 4;
+          var withinY = bp[1] > brickY && bp[1] < brickY + b.height;
           if (withinX && withinY) {
             this.bounceY();
             console.log('hit');
@@ -268,12 +268,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Brick = function () {
-  function Brick(pos) {
+  function Brick(pos, input) {
     _classCallCheck(this, Brick);
 
     this.pos = pos;
-    this.value = "TESTING";
-    this.width = this.value.length / 10;
+    this.value = input;
+    this.width = this.value.length / 12;
+    this.height = 1 / 8;
     this.visible = true;
   }
 
@@ -288,9 +289,12 @@ var Brick = function () {
       if (this.visible) {
         ctx.fillStyle = "#000000";
         var x = this.pos[0] * cellSize - cellSize * this.width / 2;
-        var y = this.pos[1] * cellSize - cellSize / 8;
+        var y = this.pos[1] * cellSize - cellSize * this.height / 2;
 
-        ctx.fillRect(x, y, this.width * cellSize, cellSize / 4);
+        ctx.fillRect(x, y, this.width * cellSize, cellSize * this.height);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = this.height * cellSize + "px Lucida Console";
+        ctx.fillText(this.value, x, y + cellSize * this.height);
       }
     }
   }]);
@@ -380,17 +384,23 @@ var ctx = canvas.getContext('2d');
 canvas.width = -1;
 canvas.height = -1;
 
+var entities = [new _paddle2.default(innerWidth / 2), new _ball2.default([1.15, 2.03])];
+var bricks = [];
+var res = void 0;
 window.startGame = function () {
   document.getElementById("hide").style.display = "none";
   document.getElementById("canvas").style.display = "block";
   var string = document.getElementById("essay").value;
-  var res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+  res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
   res = res.split(" ");
-  console.log(res);
+  createRack();
 };
 
-var entities = [new _paddle2.default(innerWidth / 2), new _ball2.default([1, 2])];
-var bricks = [new _brick2.default([1, 1])];
+function createRack() {
+  for (var i = 0; i < res.length; i++) {
+    bricks.push(new _brick2.default([Math.random() * 4, Math.random() * 2], res[i]));
+  }
+}
 
 function eventListeners() {
   canvas.addEventListener("mousemove", function () {

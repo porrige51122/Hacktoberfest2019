@@ -10,18 +10,23 @@ canvas.width = -1;
 canvas.height = -1;
 
 
-let entities = [new Paddle(innerWidth/2), new Ball([1, 2])];
-let bricks = [new Brick([1, 1])];
-
+let entities = [new Paddle(innerWidth/2), new Ball([1.15, 2.03])];
+let bricks = [];
+let res;
 window.startGame = function () {
   document.getElementById("hide").style.display = "none";
   document.getElementById("canvas").style.display = "block";
   let string = document.getElementById("essay").value;
-  var res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
+  res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
   res = res.split(" ");
-  console.log(res);
+  createRack();
 }
 
+function createRack() {
+  for (let i = 0; i < res.length; i++) {
+    bricks.push(new Brick([Math.random() * 4, Math.random() * 2], res[i]));
+  }
+}
 
 function eventListeners() {
   canvas.addEventListener("mousemove", () => {
