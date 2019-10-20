@@ -326,6 +326,7 @@ var Paddle = function () {
 
     this.pos = pos;
     this.width = 1;
+    this.height = 0.05;
   }
 
   _createClass(Paddle, [{
@@ -337,7 +338,7 @@ var Paddle = function () {
     key: "render",
     value: function render(canvas, ctx, cellSize) {
       ctx.fillStyle = "#000000";
-      ctx.fillRect(this.pos - cellSize * this.width / 2, canvas.height - 5, this.width * cellSize, 5);
+      ctx.fillRect(this.pos - cellSize * this.width / 2, cellSize * (1 - this.height) * 3, this.width * cellSize, this.height * cellSize);
     }
   }]);
 
