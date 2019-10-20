@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <div class="hero is-fullheight is-info">
+  <div id="hide" class="hero is-fullheight is-info">
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="section">
@@ -21,19 +21,22 @@
           <h1 class="subtitle">Ever had an impossible essay, time to get revenge... Paste it</h1>
         </div>
         <div class="section">
-          <textarea class="textarea is-large" placeholder="Enter your Essay here!"></textarea>
+          <textarea id="essay" class="textarea is-large" placeholder="Enter your Essay here!"></textarea>
         </div>
         <div class="section">
-          <button class="button is-medium">Breakout</button>
+          <button class="button is-medium" onclick="startGame();">Breakout</button>
         </div>
-        <canvas></canvas>
       </div>
     </div>
   </div>
+  <canvas></canvas>
 <script type="text/javascript" src="./js/main.bundle.js"></script></body>
 
 <script>
-
+  function startGame() {
+    document.getElementById("hide").style.display = "none";
+    console.log(document.getElementById("essay").value);
+  }
 </script>
 
 </html>
