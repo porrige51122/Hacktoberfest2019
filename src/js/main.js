@@ -11,7 +11,10 @@ canvas.height = -1;
 window.startGame = function () {
   document.getElementById("hide").style.display = "none";
   document.getElementById("canvas").style.display = "block";
-  console.log(document.getElementById("essay").value);
+  let string = document.getElementById("essay").value;
+  var res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
+  res = res.split(" ");
+  console.log(res);
 }
 
 let entities = [new Paddle(innerWidth / 2), new Ball([1, 2])];
