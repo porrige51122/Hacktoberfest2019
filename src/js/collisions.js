@@ -10,10 +10,10 @@ class Collisions {
     for (let i = 0; i < this.bricks.length; i++) {
       let b = this.bricks[i];
       if (b.visible) {
-        let brickX = (b.pos[0]) - (b.width) / 2;
-        let brickY = (b.pos[1]) - (1 / 8);
+        let brickX = (b.pos[0]) - b.width / 2;
+        let brickY = (b.pos[1]) - b.height / 2;
         let withinX = bp[0] > brickX && bp[0] < (brickX + b.width);
-        let withinY = bp[1] > brickY && bp[1] < (brickY + 1/4);
+        let withinY = bp[1] > brickY && bp[1] < (brickY + b.height);
         if (withinX && withinY) {
           this.bounceY();
           console.log('hit');
