@@ -4,10 +4,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   mode: 'development',
-  entry: './src/main.js',
+  entry: './src/js/main.js',
   output: {
     path: __dirname + '/dist/',
-    filename: './js/pond.main.js'
+    filename: './js/main.bundle.js'
   },
   module: {
     rules: [
