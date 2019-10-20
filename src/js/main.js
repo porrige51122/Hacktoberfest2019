@@ -1,3 +1,5 @@
+import { renderMain } from './render.js';
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -22,7 +24,7 @@ function tick() {
 }
 
 function render() {
-
+  renderMain();
 }
 
 function loop() {

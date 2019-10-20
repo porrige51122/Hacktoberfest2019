@@ -96,6 +96,8 @@
 "use strict";
 
 
+var _render = __webpack_require__(/*! ./render.js */ "./src/js/render.js");
+
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
@@ -113,7 +115,9 @@ function resize() {}
 
 function tick() {}
 
-function render() {}
+function render() {
+  (0, _render.renderMain)();
+}
 
 function loop() {
   window.requestAnimationFrame(function () {
@@ -125,6 +129,25 @@ function loop() {
 }
 
 init();
+
+/***/ }),
+
+/***/ "./src/js/render.js":
+/*!**************************!*\
+  !*** ./src/js/render.js ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function renderMain() {}
+
+exports.renderMain = renderMain;
 
 /***/ })
 
