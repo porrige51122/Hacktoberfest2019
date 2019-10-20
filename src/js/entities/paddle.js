@@ -3,6 +3,7 @@ class Paddle {
     this.pos = pos;
     this.width = 1;
     this.height = 0.05;
+    this.buffer = 0.05;
   }
 
   tick(pos) {
@@ -11,7 +12,7 @@ class Paddle {
 
   render(canvas, ctx, cellSize) {
     ctx.fillStyle = "#000000";
-    ctx.fillRect(this.pos - ((cellSize * this.width) / 2), cellSize * (1 - this.height) * 3, this.width * cellSize, this.height * cellSize);
+    ctx.fillRect(this.pos - ((cellSize * this.width) / 2), canvas.height - (this.height * cellSize) - (this.buffer * cellSize), this.width * cellSize, this.height * cellSize);
   }
 }
 

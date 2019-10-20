@@ -14,13 +14,13 @@ class Brick {
   render(canvas, ctx, cellSize) {
     if (this.visible) {
       ctx.fillStyle = "#000000";
-      let x = (this.pos[0] * cellSize) - ((cellSize * this.width) / 2);
-      let y = (this.pos[1] * cellSize) - (cellSize * this.height)/ 2;
+      let x = (this.pos[0] * cellSize);
+      let y = (this.pos[1] * cellSize);
 
       ctx.fillRect(x, y, this.width * cellSize, cellSize * this.height);
       ctx.fillStyle = "#FFFFFF";
       ctx.font = ((this.height * cellSize))+"px Lucida Console"
-      ctx.fillText(this.value, x, y+(cellSize * this.height));
+      ctx.fillText(this.value, x + cellSize/40, y+(cellSize * this.height) - cellSize/48);
 
     }
   }
