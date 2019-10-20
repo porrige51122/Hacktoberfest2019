@@ -105,32 +105,33 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Collisions = function () {
-  function Collisions(pos, vel) {
+  function Collisions(paddle, ball) {
     _classCallCheck(this, Collisions);
 
-    this.pos = pos;
-    this.vel = vel;
+    console.log('hello');
+    this.ball = ball;
+    this.paddle = paddle;
   }
 
   _createClass(Collisions, [{
-    key: "checkBounce",
-    value: function checkBounce(pos, vel) {
-      if (pos[0] < 0 || pos[0] > 4) {
+    key: 'checkBounce',
+    value: function checkBounce() {
+      if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
         this.bounceX(vel);
       }
-      if (pos[1] < 0 || pos[1] > 3) {
+      if (this.ball.pos[1] < 0 || this.ball.pos[1] > 3) {
         this.bounceY(vel);
       }
     }
   }, {
-    key: "bounceX",
+    key: 'bounceX',
     value: function bounceX(vel) {
-      vel[0] = -vel[0];
+      this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: "bounceY",
+    key: 'bounceY',
     value: function bounceY(vel) {
-      vel[1] = -vel[1];
+      this.ball.vel[1] = -this.ball.vel[1];
     }
   }]);
 
@@ -157,12 +158,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _collisions = __webpack_require__(/*! ../collisions.js */ "./src/js/collisions.js");
-
-var _collisions2 = _interopRequireDefault(_collisions);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Ball = function () {
@@ -172,7 +167,6 @@ var Ball = function () {
     this.pos = pos;
     this.vel = [0.01, 0.01];
     this.width = 0.05;
-    this.collisions = new _collisions2.default();
   }
 
   _createClass(Ball, [{
@@ -180,7 +174,6 @@ var Ball = function () {
     value: function tick() {
       this.pos[0] += this.vel[0];
       this.pos[1] += this.vel[1];
-      this.collisions.checkBounce(this.pos, this.vel);
     }
   }, {
     key: "render",
@@ -340,12 +333,22 @@ init();
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.renderMain = undefined;
+
+var _collisions = __webpack_require__(/*! ./collisions.js */ "./src/js/collisions.js");
+
+var _collisions2 = _interopRequireDefault(_collisions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function renderMain(canvas, ctx, entities, cellSize) {
   ctx.fillStyle = "#FF0000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  var hit = new _collisions2.default(entities[0], entities[1]);
   entities.forEach(function (entity) {
     return entity.render(canvas, ctx, cellSize);
   });
+  hit.checkBounce();
 }
 
 exports.renderMain = renderMain;

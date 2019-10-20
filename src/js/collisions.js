@@ -1,24 +1,25 @@
 class Collisions {
-  constructor(pos, vel) {
-    this.pos = pos;
-    this.vel = vel;
+  constructor(paddle, ball) {
+    console.log('hello')
+    this.ball = ball;
+    this.paddle = paddle;
   }
 
-  checkBounce(pos, vel) {
-    if (pos[0] < 0 || pos[0] > 4) {
+  checkBounce() {
+    if (this.ball.pos[0] < 0 || this.ball.pos[0] > 4) {
       this.bounceX(vel);
     }
-    if (pos[1] < 0 || pos[1] > 3) {
+    if (this.ball.pos[1] < 0 || this.ball.pos[1] > 3) {
       this.bounceY(vel);
     }
   }
 
   bounceX(vel) {
-    vel[0] = -vel[0];
+    this.ball.vel[0] = -this.ball.vel[0];
   }
 
   bounceY(vel) {
-    vel[1] = -vel[1];
+    this.ball.vel[1] = -this.ball.vel[1];
   }
 }
 
