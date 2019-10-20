@@ -450,7 +450,7 @@ var nextLevel = false;
 function createRack() {
   var maxLetters = 50;
   var lettersPerLine = 0;
-  out: for (var height = 1 / 6; height < 0.2; height += 1 / 6) {
+  out: for (var height = 1 / 6; height < 2; height += 1 / 6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
         break out;

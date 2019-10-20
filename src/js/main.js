@@ -47,7 +47,7 @@ let nextLevel = false;
 function createRack() {
   const maxLetters = 50;
   let lettersPerLine = 0;
-  out: for (let height = 1/6; height < 0.2; height += 1/6) {
+  out: for (let height = 1/6; height < 2; height += 1/6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
         break out;
