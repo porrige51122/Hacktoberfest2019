@@ -37,7 +37,7 @@ class Collisions {
     }
   }
 
-  checkBounce(cellSize) {
+  checkBounce(cellSize, lives) {
     if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
         this.bounceX();
     }
@@ -49,10 +49,9 @@ class Collisions {
           this.ball.colliding = true;
           this.paddleBounce((this.paddle.pos/cellSize) - (this.paddle.width/2), this.paddle.width, this.ball.pos[0]);
         } else {
-          //this.ball.reset();
-          document.getElementById("canvas").style.display = "none";
-          document.getElementById("gameOver").style.display = "block";
-          this.ball.vel = [0,0];
+            document.getElementById("canvas").style.display = "none";
+            document.getElementById("gameOver").style.display = "block";
+            this.ball.vel = [0,0];
         }
       } else if (this.ball.pos[1] - this.ball.width < 0) {
         this.ball.colliding = true;

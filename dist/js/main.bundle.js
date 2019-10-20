@@ -148,7 +148,7 @@ var Collisions = function () {
     }
   }, {
     key: 'checkBounce',
-    value: function checkBounce(cellSize) {
+    value: function checkBounce(cellSize, lives) {
       if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
         this.bounceX();
       }
@@ -159,7 +159,6 @@ var Collisions = function () {
             this.ball.colliding = true;
             this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
           } else {
-            //this.ball.reset();
             document.getElementById("canvas").style.display = "none";
             document.getElementById("gameOver").style.display = "block";
             this.ball.vel = [0, 0];
@@ -412,6 +411,7 @@ var ctx = canvas.getContext('2d');
 canvas.width = -1;
 canvas.height = -1;
 
+var lives = 3;
 var entities = [new _paddle2.default(innerWidth / 2), new _ball2.default([1.15, 2.03])];
 var bricks = [];
 var res = void 0;
@@ -503,7 +503,7 @@ function tick() {
 }
 
 function render() {
-  (0, _render.renderMain)(canvas, ctx, entities, cellSize, bricks, nextLevel);
+  (0, _render.renderMain)(canvas, ctx, entities, cellSize, bricks, nextLevel, lives);
 }
 
 function loop() {
@@ -540,7 +540,7 @@ var _collisions2 = _interopRequireDefault(_collisions);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel) {
+function renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel, lives) {
   ctx.fillStyle = "#f1c40f";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   var hit = new _collisions2.default(entities[0], entities[1], bricks);
@@ -550,7 +550,7 @@ function renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel) {
   bricks.forEach(function (brick) {
     return brick.render(canvas, ctx, cellSize);
   });
-  hit.checkBounce(cellSize);
+  hit.checkBounce(cellSize, lives);
   hit.checkBreak(cellSize, nextLevel);
 }
 

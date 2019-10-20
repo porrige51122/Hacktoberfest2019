@@ -9,6 +9,7 @@ const ctx = canvas.getContext('2d')
 canvas.width = -1;
 canvas.height = -1;
 
+let lives = 3;
 let entities = [new Paddle(innerWidth/2), new Ball([1.15, 2.03])];
 let bricks = [];
 let res;
@@ -100,7 +101,7 @@ function tick() {
 }
 
 function render() {
-  renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel);
+  renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel, lives);
 }
 
 function loop() {
