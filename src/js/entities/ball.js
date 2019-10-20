@@ -12,12 +12,14 @@ class Ball {
   }
 
   tick() {
-    this.colliding = false;
+
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
+
   }
 
   render(canvas, ctx, cellSize) {
+    this.colliding = false;
     ctx.fillStyle = "#000000";
     ctx.beginPath();
     ctx.arc(this.pos[0] * cellSize, this.pos[1] * cellSize, this.width * cellSize, 0, 2 * Math.PI);

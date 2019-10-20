@@ -114,13 +114,15 @@ var Collisions = function () {
   }
 
   _createClass(Collisions, [{
-    key: 'checkBreak',
+    key: "checkBreak",
     value: function checkBreak() {
+      var isWin = true;
       var bp = this.ball.pos;
       var bw = this.ball.width;
       for (var i = 0; i < this.bricks.length; i++) {
         var b = this.bricks[i];
         if (b.visible) {
+          isWin = false;
           var brickX = b.pos[0] - b.width / 2;
           var brickY = b.pos[1] - b.height / 2;
           var withinX = bp[0] + bw > brickX && bp[0] - bw < brickX + b.width;
@@ -132,9 +134,14 @@ var Collisions = function () {
           }
         }
       }
+      if (isWin) {
+        document.getElementById("canvas").style.display = "none";
+        document.getElementById("youWin").style.display = "block";
+        this.ball.vel = [0, 0];
+      }
     }
   }, {
-    key: 'checkBounce',
+    key: "checkBounce",
     value: function checkBounce(cellSize) {
       if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
         this.bounceX();
@@ -146,7 +153,9 @@ var Collisions = function () {
             this.ball.colliding = true;
             this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
           } else {
-            this.ball.reset();
+            //this.ball.reset();
+            document.getElementById("canvas").style.display = "none";
+            document.getElementById("gameOver").style.display = "block";
           }
         } else if (this.ball.pos[1] - this.ball.width < 0) {
           this.ball.colliding = true;
@@ -155,17 +164,17 @@ var Collisions = function () {
       }
     }
   }, {
-    key: 'bounceX',
+    key: "bounceX",
     value: function bounceX() {
       this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: 'bounceY',
+    key: "bounceY",
     value: function bounceY() {
       this.ball.vel[1] = -this.ball.vel[1];
     }
   }, {
-    key: 'paddleBounce',
+    key: "paddleBounce",
     value: function paddleBounce(padPos, padWidth, ballPos) {
       var newVel = void 0;
       if (ballPos < padPos + padWidth / 6) {
@@ -393,7 +402,7 @@ var res = void 0;
 
 window.startGame = function () {
   var string = document.getElementById("essay").value;
-  if (string.length == 0 || string.length > 5) {
+  if (string.length == 0 || string.length > 5000) {
     Toastify({
       text: "Your essay must contain at least one character and less than 5000 characters.",
       duration: 3000,
