@@ -96,17 +96,35 @@
 "use strict";
 
 
-var _utils = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module './utils'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
-var _utils2 = _interopRequireDefault(_utils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
+
+function eventListeners() {}
+
+function init() {
+  eventListeners();
+  loop();
+}
+
+function resize() {}
+
+function tick() {}
+
+function render() {}
+
+function loop() {
+  window.requestAnimationFrame(function () {
+    resize();
+    tick();
+    render();
+    loop();
+  });
+}
+
+init();
 
 /***/ })
 
