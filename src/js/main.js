@@ -9,8 +9,19 @@ const ctx = canvas.getContext('2d')
 canvas.width = -1;
 canvas.height = -1;
 
+
 let entities = [new Paddle(innerWidth/2), new Ball([1, 2])];
 let bricks = [new Brick([1, 1])];
+
+window.startGame = function () {
+  document.getElementById("hide").style.display = "none";
+  document.getElementById("canvas").style.display = "block";
+  let string = document.getElementById("essay").value;
+  var res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
+  res = res.split(" ");
+  console.log(res);
+}
+
 
 function eventListeners() {
   canvas.addEventListener("mousemove", () => {
@@ -24,14 +35,14 @@ function init() {
   loop();
 }
 
-let aspectRatio = [4,3];
+let aspectRatio = [4, 3];
 let oldSize = [canvas.width, canvas.height];
 let cellSize = 1;
 
 function resize() {
   if (oldSize[0] != innerWidth || oldSize[1] != innerHeight) {
-    let cellWidth = innerWidth/aspectRatio[0];
-    let cellHeight = innerHeight/aspectRatio[1];
+    let cellWidth = innerWidth / aspectRatio[0];
+    let cellHeight = innerHeight / aspectRatio[1];
     if (cellWidth > cellHeight) {
       cellWidth = cellHeight;
     } else {

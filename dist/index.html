@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Essay Breakout</title>
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <canvas></canvas>
-  <script type="text/javascript" src="./js/main.bundle.js"></script></body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Essay Breakout</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <style>
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="hide" class="hero is-fullheight is-info">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <div class="section">
+          <h1 class="title">Welcome to Essay Breakout</h1>
+          <h1 class="subtitle">Ever had an impossible essay? Time to get revenge... Paste it</h1>
+        </div>
+        <div class="section">
+          <textarea id="essay" class="textarea is-large" placeholder="Enter your Essay here!"></textarea>
+        </div>
+        <div class="section">
+          <button class="button is-medium" onclick="startGame();">Breakout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <canvas id="canvas" style="display: none;"></canvas>
+<script type="text/javascript" src="./js/main.bundle.js"></script></body>
+
 </html>
