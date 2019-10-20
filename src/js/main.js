@@ -8,7 +8,13 @@ const ctx = canvas.getContext('2d')
 canvas.width = -1;
 canvas.height = -1;
 
-let entities = [new Paddle(innerWidth/2), new Ball([1, 2])];
+window.startGame = function () {
+  document.getElementById("hide").style.display = "none";
+  document.getElementById("canvas").style.display = "block";
+  console.log(document.getElementById("essay").value);
+}
+
+let entities = [new Paddle(innerWidth / 2), new Ball([1, 2])];
 
 function eventListeners() {
   canvas.addEventListener("mousemove", () => {
@@ -59,6 +65,3 @@ function loop() {
 }
 
 init();
-
-
-
