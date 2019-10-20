@@ -15,7 +15,7 @@ let res;
 
 window.startGame = function () {
   let string = document.getElementById("essay").value;
-  if(string.length == 0 || string.length > 5){
+  if(string.length == 0 || string.length > 5000){
     Toastify({
       text: "Your essay must contain at least one character and less than 5000 characters.",
       duration: 3000,
