@@ -9,10 +9,10 @@ const ctx = canvas.getContext('2d')
 canvas.width = -1;
 canvas.height = -1;
 
-
 let entities = [new Paddle(innerWidth/2), new Ball([1.15, 2.03])];
 let bricks = [];
 let res;
+
 window.startGame = function () {
   document.getElementById("hide").style.display = "none";
   document.getElementById("canvas").style.display = "block";
@@ -29,9 +29,10 @@ function createRack() {
 }
 
 function eventListeners() {
-  canvas.addEventListener("mousemove", () => {
-    entities[0].pos = event.clientX;
-  })
+  window.document.onkeydown = (e) => {
+    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 10;
+    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 10;
+  }
 }
 
 function init() {
