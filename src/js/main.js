@@ -19,6 +19,8 @@ window.startGame = function () {
   let string = document.getElementById("essay").value;
   var res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
   res = res.split(" ");
+  init();
+  entities[0].pos = canvas.width / 2;
 }
 
 
@@ -70,5 +72,3 @@ function loop() {
     loop();
   })
 }
-
-init();
