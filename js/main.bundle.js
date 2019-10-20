@@ -437,7 +437,7 @@ function createRack() {
   var maxLetters = 50;
   var lettersPerLine = 0;
   var index = 0;
-  out: for (var height = 1 / 6; height < 2; height += 1 / 6) {
+  out: for (var height = 1 / 6; height < 1; height += 1 / 6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
         break out;
@@ -452,8 +452,8 @@ function createRack() {
 
 function eventListeners() {
   window.document.onkeydown = function (e) {
-    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 10;
-    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 10;
+    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 20;
+    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 20;
   };
 }
 
