@@ -10,23 +10,23 @@ canvas.width = -1;
 canvas.height = -1;
 
 
-let entities = [new Paddle(innerWidth/2), new Ball([1, 2])];
+let entities = [new Paddle(innerWidth / 2), new Ball([1, 2])];
 let bricks = [new Brick([1, 1])];
 
 window.startGame = function () {
   document.getElementById("hide").style.display = "none";
   document.getElementById("canvas").style.display = "block";
   let string = document.getElementById("essay").value;
-  var res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
+  var res = string.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
   res = res.split(" ");
-  console.log(res);
 }
 
 
 function eventListeners() {
-  canvas.addEventListener("mousemove", () => {
-    entities[0].pos = event.clientX;
-  })
+  window.document.onkeydown = (e) => {
+    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 10;
+    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 10;
+  }
 }
 
 function init() {
