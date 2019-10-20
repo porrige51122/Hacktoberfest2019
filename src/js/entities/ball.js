@@ -4,17 +4,20 @@ class Ball {
     this.vel = [0.01, 0.01];
     this.width = 0.05;
     this.colliding = false;
+    this.difficulty = 1;
   }
 
   reset() {
+    this.difficulty = 1;
     this.pos = [1, 2];
     this.vel = [0.01, 0.01];
   }
 
   tick() {
+    this.difficulty += 0.001
     this.colliding = false;
-    this.pos[0] += this.vel[0];
-    this.pos[1] += this.vel[1];
+    this.pos[0] += this.vel[0] * this.difficulty;
+    this.pos[1] += this.vel[1] * this.difficulty;
   }
 
   render(canvas, ctx, cellSize) {
