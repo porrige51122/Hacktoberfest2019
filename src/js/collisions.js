@@ -9,12 +9,16 @@ class Collisions {
     let bp = this.ball.pos;
     for (let i = 0; i < this.bricks.length; i++) {
       let b = this.bricks[i];
-      let brickX = (b.pos[0]) - (this.width) / 2;
-      let brickY = (b.pos[1]) - (1 / 4);
-      let withinX = bp[0] > brickX && bp[0] < (brickX + b.width);
-      let withinY = bp[1] > brickY && bp[1] < (brickY + 1/8);
-      if (withinX && withinY) {
-        console.log('HIT');
+      if (b.visible) {
+        let brickX = (b.pos[0]) - (b.width) / 2;
+        let brickY = (b.pos[1]) - (1 / 8);
+        let withinX = bp[0] > brickX && bp[0] < (brickX + b.width);
+        let withinY = bp[1] > brickY && bp[1] < (brickY + 1/4);
+        if (withinX && withinY) {
+          this.bounceY();
+          console.log('hit');
+          this.bricks[i].visible = false;
+        }
       }
     }
   }

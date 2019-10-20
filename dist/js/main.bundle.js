@@ -119,12 +119,16 @@ var Collisions = function () {
       var bp = this.ball.pos;
       for (var i = 0; i < this.bricks.length; i++) {
         var b = this.bricks[i];
-        var brickX = b.pos[0] - this.width / 2;
-        var brickY = b.pos[1] - 1 / 4;
-        var withinX = bp[0] > brickX && bp[0] < brickX + b.width;
-        var withinY = bp[1] > brickY && bp[1] < brickY + 1 / 8;
-        if (withinX && withinY) {
-          console.log('HIT');
+        if (b.visible) {
+          var brickX = b.pos[0] - b.width / 2;
+          var brickY = b.pos[1] - 1 / 8;
+          var withinX = bp[0] > brickX && bp[0] < brickX + b.width;
+          var withinY = bp[1] > brickY && bp[1] < brickY + 1 / 4;
+          if (withinX && withinY) {
+            this.bounceY();
+            console.log('hit');
+            this.bricks[i].visible = false;
+          }
         }
       }
     }
@@ -281,11 +285,13 @@ var Brick = function () {
   }, {
     key: "render",
     value: function render(canvas, ctx, cellSize) {
-      ctx.fillStyle = "#000000";
-      var x = this.pos[0] * cellSize - cellSize * this.width / 2;
-      var y = this.pos[1] * cellSize - cellSize / 8;
+      if (this.visible) {
+        ctx.fillStyle = "#000000";
+        var x = this.pos[0] * cellSize - cellSize * this.width / 2;
+        var y = this.pos[1] * cellSize - cellSize / 8;
 
-      ctx.fillRect(x, y, this.width * cellSize, cellSize / 4);
+        ctx.fillRect(x, y, this.width * cellSize, cellSize / 4);
+      }
     }
   }]);
 
