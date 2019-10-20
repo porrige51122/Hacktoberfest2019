@@ -6,11 +6,13 @@ class Collisions {
   }
 
   checkBreak() {
+    let isWin = true;
     let bp = this.ball.pos;
     let bw = this.ball.width;
     for (let i = 0; i < this.bricks.length; i++) {
       let b = this.bricks[i];
       if (b.visible) {
+        isWin = false;
         let brickX = (b.pos[0]);
         let brickY = (b.pos[1]);
         let withinX = bp[0] + bw > brickX && bp[0] - bw < (brickX + b.width);
@@ -21,6 +23,11 @@ class Collisions {
           this.bricks[i].visible = false;
         }
       }
+    }
+    if (isWin){
+      document.getElementById("canvas").style.display = "none";
+      document.getElementById("youWin").style.display = "block";
+      this.ball.vel = [0,0];
     }
   }
 
@@ -36,7 +43,10 @@ class Collisions {
           this.ball.colliding = true;
           this.paddleBounce((this.paddle.pos/cellSize) - (this.paddle.width/2), this.paddle.width, this.ball.pos[0]);
         } else {
-          this.ball.reset();
+          //this.ball.reset();
+          document.getElementById("canvas").style.display = "none";
+          document.getElementById("gameOver").style.display = "block";
+          this.ball.vel = [0,0];
         }
       } else if (this.ball.pos[1] - this.ball.width < 0) {
         this.ball.colliding = true;

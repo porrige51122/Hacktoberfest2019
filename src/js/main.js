@@ -14,17 +14,31 @@ let bricks = [];
 let res;
 
 window.startGame = function () {
-  document.getElementById("hide").style.display = "none";
-  document.getElementById("canvas").style.display = "block";
   let string = document.getElementById("essay").value;
-  res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
-  res = res.split(" ");
+  if(string.length == 0 || string.length > 5000){
+    Toastify({
+      text: "Your essay must contain at least one character and less than 5000 characters.",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: 'right', // `left`, `center` or `right`
+      backgroundColor: "#ff3f34",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){} // Callback after click
+    }).showToast();
+  }else{
+    document.getElementById("hide").style.display = "none";
+    document.getElementById("canvas").style.display = "block";
 
-  init();
-  entities[0].pos = canvas.width / 2;
+    res = string.replace(/[^\w\s]|_/g, "") .replace(/\s+/g, " ");
+    res = res.split(" ");
 
-  createRack();
+    init();
+    entities[0].pos = canvas.width / 2;
 
+    createRack();
+  }
 }
 
 function createRack() {
