@@ -86,6 +86,119 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/js/collisions.js":
+/*!******************************!*\
+  !*** ./src/js/collisions.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Collisions = function () {
+  function Collisions(pos, vel) {
+    _classCallCheck(this, Collisions);
+
+    this.pos = pos;
+    this.vel = vel;
+  }
+
+  _createClass(Collisions, [{
+    key: "checkBounce",
+    value: function checkBounce(pos, vel) {
+      if (pos[0] < 0 || pos[0] > 4) {
+        this.bounceX(vel);
+      }
+      if (pos[1] < 0 || pos[1] > 3) {
+        this.bounceY(vel);
+      }
+    }
+  }, {
+    key: "bounceX",
+    value: function bounceX(vel) {
+      vel[0] = -vel[0];
+    }
+  }, {
+    key: "bounceY",
+    value: function bounceY(vel) {
+      vel[1] = -vel[1];
+    }
+  }]);
+
+  return Collisions;
+}();
+
+exports.default = Collisions;
+
+/***/ }),
+
+/***/ "./src/js/entities/ball.js":
+/*!*********************************!*\
+  !*** ./src/js/entities/ball.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _collisions = __webpack_require__(/*! ../collisions.js */ "./src/js/collisions.js");
+
+var _collisions2 = _interopRequireDefault(_collisions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ball = function () {
+  function Ball(pos) {
+    _classCallCheck(this, Ball);
+
+    this.pos = pos;
+    this.vel = [0.01, 0.01];
+    this.width = 0.05;
+    this.collisions = new _collisions2.default();
+  }
+
+  _createClass(Ball, [{
+    key: "tick",
+    value: function tick() {
+      this.pos[0] += this.vel[0];
+      this.pos[1] += this.vel[1];
+      this.collisions.checkBounce(this.pos, this.vel);
+    }
+  }, {
+    key: "render",
+    value: function render(canvas, ctx, cellSize) {
+      ctx.fillStyle = "#000000";
+      ctx.beginPath();
+      ctx.arc(this.pos[0] * cellSize, this.pos[1] * cellSize, this.width * cellSize, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }]);
+
+  return Ball;
+}();
+
+exports.default = Ball;
+
+/***/ }),
+
 /***/ "./src/js/entities/paddle.js":
 /*!***********************************!*\
   !*** ./src/js/entities/paddle.js ***!
@@ -148,6 +261,10 @@ var _paddle = __webpack_require__(/*! ./entities/paddle.js */ "./src/js/entities
 
 var _paddle2 = _interopRequireDefault(_paddle);
 
+var _ball = __webpack_require__(/*! ./entities/ball.js */ "./src/js/entities/ball.js");
+
+var _ball2 = _interopRequireDefault(_ball);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var canvas = document.querySelector('canvas');
@@ -156,12 +273,11 @@ var ctx = canvas.getContext('2d');
 canvas.width = -1;
 canvas.height = -1;
 
-var entities = [new _paddle2.default(innerWidth / 2)];
+var entities = [new _paddle2.default(innerWidth / 2), new _ball2.default([1, 2])];
 
 function eventListeners() {
   canvas.addEventListener("mousemove", function () {
     entities[0].pos = event.clientX;
-    console.log('wow');
   });
 }
 
@@ -190,7 +306,9 @@ function resize() {
   }
 }
 
-function tick() {}
+function tick() {
+  entities[1].tick();
+}
 
 function render() {
   (0, _render.renderMain)(canvas, ctx, entities, cellSize);
