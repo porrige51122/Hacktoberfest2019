@@ -1,12 +1,13 @@
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   mode: 'development',
-  entry: './src/js/canvas.js',
+  entry: './src/js/main.js',
   output: {
     path: __dirname + '/dist/',
-    filename: './js/canvas.bundle.js'
+    filename: './js/main.bundle.js'
   },
   module: {
     rules: [
@@ -19,6 +20,22 @@ module.exports = {
             presets: ['env']
           }
         }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              // options...
+            }
+          }
+        ]
       }
     ]
   },
@@ -32,8 +49,10 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      favicon: 'favicon.ico',
       template: 'src/index.html'
+    }),
+	new MiniCssExtractPlugin({
+      filename: 'css/[name].bundle.css'
     })
   ],
   watch: true,
