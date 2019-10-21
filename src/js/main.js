@@ -9,15 +9,16 @@ const ctx = canvas.getContext('2d')
 canvas.width = -1;
 canvas.height = -1;
 
+let lives = 3;
 let entities = [new Paddle(innerWidth/2), new Ball([1.15, 2.03])];
 let bricks = [];
 let res;
 
 window.startGame = function () {
   let string = document.getElementById("essay").value;
-  if(string.length == 0 || string.length > 5000){
+  if(string.length == 0){
     Toastify({
-      text: "Your essay must contain at least one character and less than 5000 characters.",
+      text: "Your essay must contain at least one character.",
       duration: 3000,
       newWindow: true,
       close: true,
@@ -41,10 +42,12 @@ window.startGame = function () {
   }
 }
 
+let index = 0;
+let nextLevel = false;
+
 function createRack() {
   const maxLetters = 50;
   let lettersPerLine = 0;
-  let index = 0;
   out: for (let height = 1/6; height < 2; height += 1/6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
@@ -56,12 +59,15 @@ function createRack() {
     }
     lettersPerLine = 0;
   }
+  if (index < res.length) {
+    nextLevel = true;
+  }
 }
 
 function eventListeners() {
   window.document.onkeydown = (e) => {
-    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 10;
-    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 10;
+    if (e.keyCode == 37 && entities[0].pos > 0) entities[0].pos -= 20;
+    if (e.keyCode == 39 && entities[0].pos < canvas.width) entities[0].pos += 20;
   }
 }
 
@@ -95,7 +101,7 @@ function tick() {
 }
 
 function render() {
-  renderMain(canvas, ctx, entities, cellSize, bricks);
+  renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel, lives);
 }
 
 function loop() {
@@ -106,3 +112,5 @@ function loop() {
     loop();
   })
 }
+
+export { createRack };
