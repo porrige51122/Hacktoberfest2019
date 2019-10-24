@@ -20,7 +20,12 @@ class Collisions {
         let withinX = bp[0] + bw > brickX && bp[0] - bw < (brickX + b.width);
         let withinY = bp[1] + bw > brickY && bp[1] - bw < (brickY + b.height);
         if (withinX && withinY) {
-          this.bounceY();
+          withinY = bp[1] + bw/2 > brickY && bp[1] - bw/2 < (brickY + b.height);
+          if (withinY) {
+            this.bounceX();
+          } else {
+            this.bounceY();
+          }
           console.log('hit');
           this.bricks[i].visible = false;
         }
