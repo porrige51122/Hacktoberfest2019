@@ -453,14 +453,16 @@ window.startGame = function () {
 window.hits = 0;
 
 var index = 0;
-var nextLevel = false;
+var nextLevel = void 0;
 
 function createRack() {
   var maxLetters = 50;
   var lettersPerLine = 0;
+  nextLevel = false;
   out: for (var height = 1 / 6; height < 0.6; height += 1 / 6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
+        index++;
         break out;
       }
       if (res[index].localeCompare("") == 1) {
@@ -471,11 +473,9 @@ function createRack() {
     }
     lettersPerLine = 0;
   }
-  if (index <= res.length) {
+  if (index < res.length) {
     nextLevel = true;
   }
-  console.log(index);
-  console.log(res.length);
 }
 
 function eventListeners() {

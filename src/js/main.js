@@ -45,14 +45,16 @@ window.startGame = function () {
 window.hits = 0;
 
 let index = 0;
-let nextLevel = false;
+let nextLevel;
 
 function createRack() {
   const maxLetters = 50;
   let lettersPerLine = 0;
+  nextLevel = false;
   out: for (let height = 1/6; height < 0.6; height += 1/6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
+        index++;
         break out;
       }
       if (res[index].localeCompare("") == 1) {
@@ -63,11 +65,9 @@ function createRack() {
     }
     lettersPerLine = 0;
   }
-  if (index <= res.length) {
+  if (index < res.length) {
     nextLevel = true;
   }
-  console.log(index);
-  console.log(res.length);
 }
 
 function eventListeners() {
