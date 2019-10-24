@@ -7,7 +7,7 @@ function renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel, lives) {
   entities.forEach((entity) => entity.render(canvas,ctx, cellSize));
   bricks.forEach((brick) => brick.render(canvas,ctx, cellSize));
   hit.checkBounce(cellSize, lives);
-  hit.checkBreak(cellSize, nextLevel);
+  hit.checkBreak(cellSize, nextLevel, hits);
 }
 
 export { renderMain };

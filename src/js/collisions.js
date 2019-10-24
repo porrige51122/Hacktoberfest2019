@@ -26,7 +26,7 @@ class Collisions {
           } else {
             this.bounceY();
           }
-          console.log('hit');
+          window.hits++;
           this.bricks[i].visible = false;
         }
       }
@@ -43,13 +43,14 @@ class Collisions {
   }
 
   checkBounce(cellSize, lives) {
-    if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
-        this.bounceX();
-    }
     if (!this.ball.colliding) {
+      if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
+        this.ball.colliding = true;
+        this.bounceX();
+      }
       if (this.ball.pos[1] + this.ball.width > 3 - this.paddle.buffer - this.paddle.height) {
-        let paddle = ((this.paddle.pos/cellSize) - (this.paddle.width/2)) < this.ball.pos[0] &&
-        ((this.paddle.pos/cellSize) + (this.paddle.width/2)) > this.ball.pos[0];
+        let paddle = ((this.paddle.pos/cellSize) - (this.paddle.width/2)) < this.ball.pos[0] + this.ball.width &&
+        ((this.paddle.pos/cellSize) + (this.paddle.width/2)) > this.ball.pos[0] - this.ball.width;
         if (paddle) {
           this.ball.colliding = true;
           this.paddleBounce((this.paddle.pos/cellSize) - (this.paddle.width/2), this.paddle.width, this.ball.pos[0]);

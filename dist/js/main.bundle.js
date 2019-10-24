@@ -116,7 +116,7 @@ var Collisions = function () {
   }
 
   _createClass(Collisions, [{
-    key: 'checkBreak',
+    key: "checkBreak",
     value: function checkBreak(nextLevel) {
       var isWin = true;
       var bp = this.ball.pos;
@@ -136,7 +136,7 @@ var Collisions = function () {
             } else {
               this.bounceY();
             }
-            console.log('hit');
+            window.hits++;
             this.bricks[i].visible = false;
           }
         }
@@ -152,14 +152,15 @@ var Collisions = function () {
       }
     }
   }, {
-    key: 'checkBounce',
+    key: "checkBounce",
     value: function checkBounce(cellSize, lives) {
-      if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
-        this.bounceX();
-      }
       if (!this.ball.colliding) {
+        if (this.ball.pos[0] - this.ball.width < 0 || this.ball.pos[0] + this.ball.width > 4) {
+          this.ball.colliding = true;
+          this.bounceX();
+        }
         if (this.ball.pos[1] + this.ball.width > 3 - this.paddle.buffer - this.paddle.height) {
-          var paddle = this.paddle.pos / cellSize - this.paddle.width / 2 < this.ball.pos[0] && this.paddle.pos / cellSize + this.paddle.width / 2 > this.ball.pos[0];
+          var paddle = this.paddle.pos / cellSize - this.paddle.width / 2 < this.ball.pos[0] + this.ball.width && this.paddle.pos / cellSize + this.paddle.width / 2 > this.ball.pos[0] - this.ball.width;
           if (paddle) {
             this.ball.colliding = true;
             this.paddleBounce(this.paddle.pos / cellSize - this.paddle.width / 2, this.paddle.width, this.ball.pos[0]);
@@ -175,17 +176,17 @@ var Collisions = function () {
       }
     }
   }, {
-    key: 'bounceX',
+    key: "bounceX",
     value: function bounceX() {
       this.ball.vel[0] = -this.ball.vel[0];
     }
   }, {
-    key: 'bounceY',
+    key: "bounceY",
     value: function bounceY() {
       this.ball.vel[1] = -this.ball.vel[1];
     }
   }, {
-    key: 'paddleBounce',
+    key: "paddleBounce",
     value: function paddleBounce(padPos, padWidth, ballPos) {
       var newVel = void 0;
       if (ballPos < padPos + padWidth / 6) {
@@ -449,26 +450,32 @@ window.startGame = function () {
   }
 };
 
+window.hits = 0;
+
 var index = 0;
 var nextLevel = false;
 
 function createRack() {
   var maxLetters = 50;
   var lettersPerLine = 0;
-  out: for (var height = 1 / 6; height < 2; height += 1 / 6) {
+  out: for (var height = 1 / 6; height < 0.6; height += 1 / 6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
         break out;
       }
-      bricks.push(new _brick2.default([4 * (lettersPerLine / maxLetters), height], res[index]));
-      lettersPerLine += res[index].length + 1;
+      if (res[index].localeCompare("") == 1) {
+        bricks.push(new _brick2.default([4 * (lettersPerLine / maxLetters), height], res[index]));
+        lettersPerLine += res[index].length + 1;
+      }
       index++;
     }
     lettersPerLine = 0;
   }
-  if (index < res.length) {
+  if (index <= res.length) {
     nextLevel = true;
   }
+  console.log(index);
+  console.log(res.length);
 }
 
 function eventListeners() {
@@ -509,6 +516,10 @@ function tick() {
 
 function render() {
   (0, _render.renderMain)(canvas, ctx, entities, cellSize, bricks, nextLevel, lives);
+
+  ctx.fillStyle = "#000000";
+  ctx.font = 0.15 * cellSize + "px Lucida Console";
+  ctx.fillText("Score : " + window.hits, 0, 0.15 * cellSize);
 }
 
 function loop() {
@@ -556,7 +567,7 @@ function renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel, lives) {
     return brick.render(canvas, ctx, cellSize);
   });
   hit.checkBounce(cellSize, lives);
-  hit.checkBreak(cellSize, nextLevel);
+  hit.checkBreak(cellSize, nextLevel, hits);
 }
 
 exports.renderMain = renderMain;

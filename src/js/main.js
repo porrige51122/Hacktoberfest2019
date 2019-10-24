@@ -42,26 +42,32 @@ window.startGame = function () {
   }
 }
 
+window.hits = 0;
+
 let index = 0;
 let nextLevel = false;
 
 function createRack() {
   const maxLetters = 50;
   let lettersPerLine = 0;
-  out: for (let height = 1/6; height < 2; height += 1/6) {
+  out: for (let height = 1/6; height < 0.6; height += 1/6) {
     while (lettersPerLine < maxLetters - 5) {
       if (index >= res.length) {
         break out;
       }
-      bricks.push(new Brick([4 * (lettersPerLine/maxLetters), height], res[index]));
-      lettersPerLine += res[index].length + 1;
+      if (res[index].localeCompare("") == 1) {
+        bricks.push(new Brick([4 * (lettersPerLine/maxLetters), height], res[index]));
+        lettersPerLine += res[index].length + 1;
+      }
       index++;
     }
     lettersPerLine = 0;
   }
-  if (index < res.length) {
+  if (index <= res.length) {
     nextLevel = true;
   }
+  console.log(index);
+  console.log(res.length);
 }
 
 function eventListeners() {
@@ -102,6 +108,10 @@ function tick() {
 
 function render() {
   renderMain(canvas, ctx, entities, cellSize, bricks, nextLevel, lives);
+
+  ctx.fillStyle = "#000000";
+  ctx.font = ((0.15 * cellSize))+"px Lucida Console";
+  ctx.fillText("Score : " + window.hits, 0, 0.15 * cellSize);
 }
 
 function loop() {
